@@ -1,0 +1,90 @@
+# ======================================
+# 通用规则（所有C++项目都适用）
+# ======================================
+# 编译产物
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.lib
+*.dll
+*.so
+*.so.*
+*.dylib
+*.ko
+*.elf
+
+# 编译生成的目录
+build/
+bin/
+lib/
+obj/
+target/
+cmake-build-*/
+Makefile
+*.mk
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+
+# 临时文件与日志
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+*.orig
+*.rej
+*.diff
+*.patch
+*.stackdump
+
+# ======================================
+# Visual Studio 专属（Windows 开发）
+# ======================================
+# VS配置与缓存
+.vs/
+*.ipch
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.opensdf
+*.sdf
+
+# VS构建输出
+Debug/
+Release/
+x64/
+x86/
+*.vcxproj.user
+*.vcxproj.filters
+*.vcxproj
+*.sln
+
+# ======================================
+# Linux 开发专属（GCC/Clang/CLion等）
+# ======================================
+# CLion/QtCreator配置
+.idea/
+*.iml
+cmake-build-debug/
+cmake-build-release/
+.qmake.stash
+*.pro.user
+
+# GCC/Clang编译缓存
+*.gcno
+*.gcda
+*.gcov
+*.gch
+*.pch
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
