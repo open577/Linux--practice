@@ -7,8 +7,17 @@
 #include <sys/wait.h>
 #include <cstring>
 #include <unordered_map>
-
+#include <sys/stat.h>
+#include <fcntl.h>
 using namespace std;
+
+//关于重定向
+#define NONE_REDIR 0
+#define INPUT_REDIR 1
+#define OUTPUT_REDIR 2
+#define APPEND_REDIR 3
+int redir=NONE_REDIR;
+string filename;
 
 //全局环境变量
 char **original_env=NULL;
@@ -194,15 +203,89 @@ void PrintCommandPrompt()
     fflush(stdout);
 }
 
+void TrimSpace(char *cmd,int& end)
+{
+    while(isspace(cmd[end]))
+        end++;
+}
+void RedirCheck(char cmd[])
+{
+    redir=NONE_REDIR;
+    filename.clear();
+    // >> > 输出 
+    // < 输入
+    int end=strlen(cmd)-1;
+    while(end>0)
+    {
+        if(cmd[end]=='<')
+        {
+            redir=INPUT_REDIR;
+            cmd[end++]=0;
+            TrimSpace(cmd,end);
+            filename=cmd+end;
+            break;
+        }
+
+        else if(cmd[end]=='>')
+        {
+            if(cmd[end-1]=='>')
+            {
+                cmd[end-1]=0;
+                redir=APPEND_REDIR;
+            }
+
+            else
+            {
+                redir=OUTPUT_REDIR;
+            }
+
+            cmd[end++]=0;
+            TrimSpace(cmd,end);
+            filename=cmd+end;
+            break;
+        }
+
+        else
+            end--;
+    }
+}
 int Execute()
 {
     pid_t id=fork();
     if(id==0)
     {
         //子进程
+        int fg=-1;
+        if(redir==INPUT_REDIR)
+        {
+            fg=open(filename.c_str(),O_RDONLY);
+            if(fg<0) exit(1);
+            dup2(fg,0);
+            close(fg);
+        }
+
+        else if(redir==OUTPUT_REDIR)
+        {
+            fg=open(filename.c_str(),O_CREAT | O_WRONLY | O_TRUNC, 0666);
+            if(fg<0) exit(1);
+            dup2(fg,1);
+            close(fg);
+        }
+
+
+        else if(redir==APPEND_REDIR)
+        {
+            fg=open(filename.c_str(),O_CREAT | O_WRONLY | O_APPEND, 0666);
+            if(fg<0) exit(1);
+            dup2(fg,2);
+            close(fg);
+        }
         execvp(g_argv[0],g_argv);
         exit(0);
+
     }
+
+
     int status=0;
     pid_t wt=waitpid(id,&status,0);
     if(wt>0) lastcode=WEXITSTATUS(status);
@@ -237,6 +320,8 @@ int main()
         if(!GetCommandLine(commandline,sizeof(commandline)))
              continue;
 
+        //重定向
+        RedirCheck(commandline);
         //命令行解析
         if(!CommandParse(commandline))
             continue;
