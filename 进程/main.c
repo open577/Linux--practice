@@ -22,28 +22,30 @@
 //
 
 
-//int main()
-//{
-  //  pid_t id = fork();
-     //   if(id == 0)
-        //{
-          //  //child
-            //int count=5;
-           // while(1)
-            //{
-              //  printf("我是一个子进程：%d\n",getpid());
-                //sleep(1);
-          ///  }
-       // }
+int main()
+{
+    pid_t id = fork();
+        if(id == 0)
+        {
+          //child
+            int count=5;
+            while(1)
+            {
+               printf("我是一个子进程：%d\n",getpid());
+               sleep(1);
+            }
+        }
         
-        //else
-        //{
-         //   while(1)
-          //  {
-           //     printf("我是一个父进程：%d\n",getpid());
-             //   sleep(1);
-           // }
-        //}
+        else
+        {
+            while(1)
+            {
+                printf("我是一个父进程：%d\n",getpid());
+                sleep(1);
+            }
+        }
+        return 0;
+}
 
         
 
@@ -100,13 +102,13 @@
 //             return 0;
 //}
 
-int main()
-{
-
-  while(1)
-  {
-    printf("我是一个进程,%d\n",getpid());
-    sleep(1);
-  }
-  return 0;
-}
+//int main()
+//{
+//
+//  while(1)
+//  {
+//    printf("我是一个进程,%d\n",getpid());
+//    sleep(1);
+//  }
+//  return 0;
+//}

@@ -1,0 +1,1 @@
+Log file fd is: 1
