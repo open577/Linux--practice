@@ -1,0 +1,7 @@
+total 116
+drwxrwxr-x  2 wyy wyy  4096 Jun 18 17:23 .
+drwxrwxr-x 14 wyy wyy  4096 Jun 13 17:47 ..
+-rw-rw-r--  1 wyy wyy    92 Jun 16 16:31 Makefile
+-rwxrwxr-x  1 wyy wyy 95256 Jun 18 17:22 myshell
+-rw-rw-r--  1 wyy wyy  6037 Jun 18 17:22 myshell.c
+-rw-rw-r--  1 wyy wyy     0 Jun 18 17:23 text..
