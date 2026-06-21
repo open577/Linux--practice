@@ -1,0 +1,2 @@
+Hello, this is content from the file!
+Line 2 of the file.
