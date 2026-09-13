@@ -1,72 +1,146 @@
 #include <iostream>
 #include <signal.h>
 #include <unistd.h>
+#include <functional>
+#include <vector>
 
-void PrintPending(sigset_t &pending)
+void Sched()
 {
-    printf("我是一个进程(%d), pending: ", getpid());
-    for (int signo = 31; signo >= 1; signo--)
-    {
-        if (sigismember(&pending, signo))
-        {
-            std::cout << "1";
-        }
-        else
-        {
-            std::cout << "0";
-        }
-    }
-    std::cout << std::endl;
+    std::cout << "我是进程调度" << std::endl;
+    // t.count--;
+    // if(t.count <= 0)
+        // 切换其他进程
+}
+void MemManger()
+{
+    std::cout << "我是周期性的内存管理，正在检查有没有内存问题" << std::endl;
+}
+void Fflush()
+{
+    std::cout << "我是刷新程序，我在定期刷新内存数据，到磁盘" << std::endl;
 }
 
-void handler(int sig)
-{
-    std::cout << "#######################" << std::endl;
-    std::cout << "递达" << sig << "信号!" << std::endl;
-    sigset_t pending;
-    int m = sigpending(&pending);
-    PrintPending(pending); // 0000 0010(处理完，2号才回被设置为0)，0000 0000(执行handler方法之前，2对应的pending已经被清理了)
-    std::cout << "#######################" << std::endl;
-}
+using func_t=std::function<void()>;
+std::vector<func_t> funcs;
+int timestamp=0;
 
+void handlerSig(int sig)
+{
+    timestamp++; //10000
+    std::cout << "##############################" << std::endl;
+    for(auto f : funcs)
+        f();
+    std::cout << "##############################" << std::endl;
+    int n = alarm(1);
+}
 int main()
 {
-    signal(SIGINT, handler);
-    // 1. 屏蔽2号信号
-    sigset_t block, oblock;
-    sigemptyset(&block);
-    sigemptyset(&oblock);
-
-    sigaddset(&block, SIGINT); // 已经对2号信号进行屏蔽了吗？没有！
-    // for(int i = 1; i<32; i++)
-    //     sigaddset(&block, i);
-
-    int n = sigprocmask(SIG_SETMASK, &block, &oblock);
-    (void)n;
-
-    // 4. 重复获取打印过程
-    int cnt = 0;
-    while (true)
+    funcs.push_back(Sched);
+    funcs.push_back(MemManger);
+    funcs.push_back(Fflush);
+    signal(SIGALRM,handlerSig);
+    alarm(1);
+    while(true)
     {
-        // 2. 获取pending信号集合
-        sigset_t pending;
-        int m = sigpending(&pending);
-
-        // 3. 打印
-        PrintPending(pending);
-        if (cnt == 30)
-        {
-            // 5. 恢复对2号信号的block情况
-            std::cout << "解除对2号的屏蔽" << std::endl;
-            sigprocmask(SIG_SETMASK, &oblock, nullptr);
-        }
-
-        sleep(1);
-        cnt++;
+        pause();
     }
-
     return 0;
 }
+
+
+
+
+
+
+
+
+// void handler(int sig)
+// {
+//     std::cout << "hello sig: " << sig << std::endl;
+//     signal(2, SIG_DFL); // 2 默认动作是终止
+//     std::cout << "恢复处理动作" << std::endl;
+// }
+
+// int main()
+// {
+//     signal(2, handler); // 自定义捕捉
+//     //signal(2, SIG_IGN); //忽略信号
+
+//     sigset_t set;
+
+//     while(true)
+//     {
+//         sleep(1);
+//         std::cout << "." << std::endl;
+//     }
+//     return 0;
+// }
+
+// void PrintPending(sigset_t &pending)
+// {
+//     printf("我是一个进程(%d), pending: ", getpid());
+//     for (int signo = 31; signo >= 1; signo--)
+//     {
+//         if (sigismember(&pending, signo))
+//         {
+//             std::cout << "1";
+//         }
+//         else
+//         {
+//             std::cout << "0";
+//         }
+//     }
+//     std::cout << std::endl;
+// }
+
+// void handler(int sig)
+// {
+//     std::cout << "#######################" << std::endl;
+//     std::cout << "递达" << sig << "信号!" << std::endl;
+//     sigset_t pending;
+//     int m = sigpending(&pending);
+//     PrintPending(pending); // 0000 0010(处理完，2号才回被设置为0)，0000 0000(执行handler方法之前，2对应的pending已经被清理了)
+//     std::cout << "#######################" << std::endl;
+// }
+
+// int main()
+// {
+//     signal(SIGINT, handler);
+//     // 1. 屏蔽2号信号
+//     sigset_t block, oblock;
+//     sigemptyset(&block);
+//     sigemptyset(&oblock);
+
+//     sigaddset(&block, SIGINT); // 已经对2号信号进行屏蔽了吗？没有！
+//     // for(int i = 1; i<32; i++)
+//     //     sigaddset(&block, i);
+
+//     int n = sigprocmask(SIG_SETMASK, &block, &oblock);
+//     (void)n;
+
+//     // 4. 重复获取打印过程
+//     int cnt = 0;
+//     while (true)
+//     {
+//         // 2. 获取pending信号集合
+//         sigset_t pending;
+//         int m = sigpending(&pending);
+
+//         // 3. 打印
+//         PrintPending(pending);
+//         if (cnt == 30)
+//         {
+//             // 5. 恢复对2号信号的block情况
+//             std::cout << "解除对2号的屏蔽" << std::endl;
+//             sigprocmask(SIG_SETMASK, &oblock, nullptr);
+//         }
+
+//         sleep(1);
+//         cnt++;
+//     }
+
+//     return 0;
+// }
 
 // void SigPrint(sigset_t &block);
 // void header(int sig)
