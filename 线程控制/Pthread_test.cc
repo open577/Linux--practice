@@ -4,6 +4,28 @@
 
 #include <stdio.h>
 
+
+
+void *newidea(void *mes)
+{
+    int a=10/0;
+    return (void*)123;
+}
+
+int main()
+{
+    pthread_t tid;
+    pthread_create(&tid, nullptr, newidea, (void *)"pthread-1");
+    void *val;
+    pthread_join(tid,&val);
+    return 0;
+}
+
+
+
+
+
+
 // void *worker(void *arg)
 // {
 //     (void)arg;
@@ -39,27 +61,27 @@
 // }
 
 
-void *newidea(void *mes)
-{
-    pthread_detach(pthread_self());
-        std::string name=(char*)mes;
-        std::cout << "我是新线程，我的name："<<name<<" "<<"我的pid是：" << getpid() << std::endl;
-        sleep(1);
-    return (void*)123;
-}
+// void *newidea(void *mes)
+// {
+//     pthread_detach(pthread_self());
+//         std::string name=(char*)mes;
+//         std::cout << "我是新线程，我的name："<<name<<" "<<"我的pid是：" << getpid() << std::endl;
+//         sleep(1);
+//     return (void*)123;
+// }
 
-int main()
-{
-    pthread_t tid;
-    pthread_create(&tid, nullptr, newidea, (void *)"pthread-1");
-    sleep(2);
-    pthread_detach(pthread_self());
-    sleep(2);
-    void *val;
-    pthread_join(tid,&val);
-    std::cout << "ret is : " << (long long int)val << std::endl;
-    return 0;
-}
+// int main()
+// {
+//     pthread_t tid;
+//     pthread_create(&tid, nullptr, newidea, (void *)"pthread-1");
+//     sleep(2);
+//     pthread_detach(pthread_self());
+//     sleep(2);
+//     void *val;
+//     pthread_join(tid,&val);
+//     std::cout << "ret is : " << (long long int)val << std::endl;
+//     return 0;
+// }
 
 // class Task
 // {
