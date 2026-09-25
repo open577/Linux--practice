@@ -6,6 +6,19 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 void *newidea(void *mes)
 {
     int a=10/0;
