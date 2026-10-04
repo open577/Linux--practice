@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <cstdio>
 #include <unistd.h>
 #include <ctime>
 #include "Mutex.hpp"
