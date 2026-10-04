@@ -1,0 +1,13 @@
+hello world
+hello world
+[XXX] [WARNNING] [4076109] [main.cc] [12] kk
+[XXX] [WARNNING] [4076396] [main.cc] [12] kk
+[XXX] [WARNNING] [4076396] [main.cc] [12] kk,3.14 8899aaaa
+[XXX] [DEBUG] [4084692] [main.cc] [12] hello world3.143
+[XXX] [DEBUG] [4084692] [main.cc] [13] hello world3.144
+[2026-10-04 00:41:54] [DEBUG] [255889] [main.cc] [12] hello world3.143
+[2026-10-04 00:41:54] [DEBUG] [255889] [main.cc] [13] hello world3.144
+[2026-10-04 00:42:06] [DEBUG] [256002] [main.cc] [12] hello world3.143
+[2026-10-04 00:42:06] [DEBUG] [256002] [main.cc] [13] hello world3.144
+[2026-10-04 00:42:09] [DEBUG] [256040] [main.cc] [12] hello world3.143
+[2026-10-04 00:42:09] [DEBUG] [256040] [main.cc] [13] hello world3.144
